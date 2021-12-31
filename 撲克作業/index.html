@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./animate.min.css" />
+
+
+
+  <style>
+    body {
+      background: url(./撲克牌/麻醬改2.jpg);
+      background-repeat: no-repeat;
+
+
+
+
+    }
+
+
+    .container {
+      width: 1300px;
+      height: 100px;
+      position: absolute;
+      top: 170px;
+      left: 300px;
+    }
+
+
+
+    .card {
+      width: 120px;
+      height: 200px;
+      /* 設定子元素在 3D 空間內 */
+      transform-style: preserve-3d;
+      margin: 10px;
+      float: left;
+      transition: transform 1s;
+    }
+
+    .card-front {
+      width: 100%;
+      height: 100%;
+      background-image: url(./撲克牌/1.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      /* 把花色翻轉到下面 */
+      transform: rotateY(180deg);
+      /* 翻過來後隱藏另一面 */
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .card-back {
+      width: 100%;
+      height: 100%;
+      background-image: url(./撲克牌/麻back.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      /* 翻過來後隱藏另一面 */
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .card-open {
+      transform: rotateY(180deg);
+    }
+
+
+
+    /*.card
+      animate:animate__flip;
+      animate__flip;0
+    }*/
+  </style>
+</head>
+
+<body>
+
+
+
+  <div class="container">
+    <div id="game"></div>
+  </div>
+  <script src="./jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    Swal.fire({
+      title: '遊戲規則',
+      text: '依照麻將規則總共17張麻將是自摸牌，3張為一組，有1組是兩張眼，翻完即自摸'
+    })
+
+    // 產生 16 張卡片
+    for (let i = 0; i < 17; i++) {
+      $('#game').append(`
+        <div class="card animate__animated animate__flip">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      `)
+    }
+    // 決定數字並打散
+    for (let i = 0; i < 3; i++) {
+      // 決定數字
+      const num = i + 1
+      $('.card').eq(i).find('.card-front').css('background-image', `url(./撲克牌/${num}.png)`)
+      $('.card').eq(i).attr('data-card', num)
+
+      // 打散
+      const target = Math.round(Math.random() * 16)
+      $('.card').eq(target).insertAfter($('.card').eq(i))
+    }
+
+    for (let i = 3; i < 6; i++) {
+      const num1 = i + 1
+      $('.card').eq(i).find('.card-front').css('background-image', `url(./撲克牌/${num1}.png)`)
+      $('.card').eq(i).attr('data-card1', num1)
+      const target = Math.round(Math.random() * 16)
+      $('.card').eq(target).insertAfter($('.card').eq(i))
+    }
+
+
+    for (let i = 6; i < 9; i++) {
+      // 決定數字
+      const num2 = i + 1
+      $('.card').eq(i).find('.card-front').css('background-image', `url(./撲克牌/${num2}.png)`)
+      $('.card').eq(i).attr('data-card2', num2)
+
+      // 打散
+      const target = Math.round(Math.random() * 16)
+      $('.card').eq(target).insertAfter($('.card').eq(i))
+    }
+
+    for (let i = 9; i < 12; i++) {
+      // 決定數字
+      const num3 = i + 1
+      $('.card').eq(i).find('.card-front').css('background-image', `url(./撲克牌/${num3}.png)`)
+      $('.card').eq(i).attr('data-card3', num3)
+
+      // 打散
+      const target = Math.round(Math.random() * 16)
+      $('.card').eq(target).insertAfter($('.card').eq(i))
+    }
+
+    for (let i = 12; i < 15; i++) {
+      // 決定數字
+      const num4 = i + 1
+      $('.card').eq(i).find('.card-front').css('background-image', `url(./撲克牌/${num4}.png)`)
+      $('.card').eq(i).attr('data-card4', num4)
+
+      // 打散
+      const target = Math.round(Math.random() * 16)
+      $('.card').eq(target).insertAfter($('.card').eq(i))
+    }
+
+    for (let i = 15; i < 17; i++) {
+      // 決定數字
+      const num5 = i + 1
+      $('.card').eq(i).find('.card-front').css('background-image', `url(./撲克牌/${num5}.png)`)
+      $('.card').eq(i).attr('data-card5', num5)
+
+      // 打散
+      const target = Math.round(Math.random() * 16)
+      $('.card').eq(target).insertAfter($('.card').eq(i))
+    }
+    // 翻牌
+    setTimeout(function () {
+      $('.animate__animated').removeClass('animate__animated');
+      $('.animate__flip').removeClass('animate__flip')
+
+    
+
+    }, 1000)
+
+    $('#game').on('click', '.card', function () {
+
+      // 最多只能翻兩張牌，且這張牌還沒翻開
+      /*$('.animate__animated').removeClass('.animate__animated')
+      $('.animate__flip').removeClass('.animate__flip')
+      $(this).addClass('.animate__animated');
+      $(this).addClass('.animate__flip')
+
+
+      /*setTimeout(function () {
+        $('.animate__animated').addClass('.animate__animated');
+        $('.animate__flip').addClass('.animate__flip')
+
+
+      }, 500)*/
+
+
+      if ($('.card-open').length < 3 && !$(this).hasClass('card-open')) {
+        $(this).addClass('card-open')
+      }
+
+      // 如果翻開兩張了
+      if ($('.card-open').length === 3) {
+        // 如果兩張數字一樣
+        if ($('.card-open').eq(0).attr('data-card') && $('.card-open').eq(1).attr('data-card') && $('.card-open').eq(2).attr('data-card')) {
+          // 使用 card-ok 標記已完成並淡出
+          $('.card-open').addClass('card-ok')
+          // 將 card-front 淡出而不是 .card，因為對 card 淡出會把 3d 壓平
+          $('.card-open .card-front').fadeTo(1000, 0)
+
+        }
+
+        if ($('.card-open').eq(0).attr('data-card1') && $('.card-open').eq(1).attr('data-card1') && $('.card-open').eq(2).attr('data-card1')) {
+          // 使用 card-ok 標記已完成並淡出
+          $('.card-open').addClass('card-ok')
+          // 將 card-front 淡出而不是 .card，因為對 card 淡出會把 3d 壓平
+          $('.card-open .card-front').fadeTo(1000, 0)
+
+        }
+
+        if ($('.card-open').eq(0).attr('data-card2') && $('.card-open').eq(1).attr('data-card2') && $('.card-open').eq(2).attr('data-card2')) {
+          // 使用 card-ok 標記已完成並淡出
+          $('.card-open').addClass('card-ok')
+          // 將 card-front 淡出而不是 .card，因為對 card 淡出會把 3d 壓平
+          $('.card-open .card-front').fadeTo(1000, 0)
+
+        }
+
+        if ($('.card-open').eq(0).attr('data-card3') && $('.card-open').eq(1).attr('data-card3') && $('.card-open').eq(2).attr('data-card3')) {
+          // 使用 card-ok 標記已完成並淡出
+          $('.card-open').addClass('card-ok')
+          // 將 card-front 淡出而不是 .card，因為對 card 淡出會把 3d 壓平
+          $('.card-open .card-front').fadeTo(1000, 0)
+
+        }
+
+        if ($('.card-open').eq(0).attr('data-card4') && $('.card-open').eq(1).attr('data-card4') && $('.card-open').eq(2).attr('data-card4')) {
+          // 使用 card-ok 標記已完成並淡出
+          $('.card-open').addClass('card-ok')
+          // 將 card-front 淡出而不是 .card，因為對 card 淡出會把 3d 壓平
+          $('.card-open .card-front').fadeTo(1000, 0)
+
+        }
+
+
+
+
+
+
+
+
+
+
+        /*if ($('.card-open').length === 3) {
+          // 如果兩張數字一樣
+          if ($('.card-open').eq(0).attr('data-card1') && $('.card-open').eq(1).attr('data-card1') && $('.card-open').eq(2).attr('data-card1')) {
+            // 使用 card-ok 標記已完成並淡出
+            $('.card-open').addClass('card-ok')
+            // 將 card-front 淡出而不是 .card，因為對 card 淡出會把 3d 壓平
+            $('.card-open .card-front').fadeTo(1000, 0)
+          }*/
+
+        // 不管一不一樣都翻回來
+        setTimeout(() => {
+          // 如果 .card-open 裡的 card-front 透明度不是 1，把 .card-open 透明度設為 0
+          // .each() 類似 for of，裡面的 $(this) 代表迴圈正在跑的元素
+          $('.card-open').each(function () {
+            if ($(this).find('.card-front').css('opacity') != 1) {
+              $(this).css('opacity', 0)
+            }
+          })
+
+          $('.card-open').removeClass('card-open')
+          if ($('.card-ok').length === 17) {
+            Swal.fire({
+              title: '恭喜自摸',
+              text: '門清自摸莊家連1拉1'
+            })
+          }
+        }, 1000)
+      } else
+        if ($('.card-open').eq(0).attr('data-card5') && $('.card-open').eq(1).attr('data-card5')) {
+          // 使用 card-ok 標記已完成並淡出
+          $('.card-open').addClass('card-ok')
+          // 將 card-front 淡出而不是 .card，因為對 card 淡出會把 3d 壓平
+          $('.card-open .card-front').fadeTo(1000, 0)
+
+        }
+
+    })
+
+
+  </script>
+</body>
+
+</html>
